@@ -13,9 +13,14 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading"> <h2 class="text-primary">Add Questions <small class="text-danger"> to the {!! $questionair->name !!} [ Total Ques:
-                    {{ count($questionair->Questions) > 0 ? count($questionair->Questions) : 0 }}
-                    <small class="text-alert"> Duration: {!! $questionair->duration !!}</small></small></h2> </div>
+                <div class="panel-heading">
+                    <h2 class="text-primary">Add Questions
+                        <small class="text-danger">in {!! $questionair->name !!}</small> -
+                        <small>Total Q#: [ {{ count($questionair->Questions) > 0 ? count($questionair->Questions) : 0 }} ]
+                            Duration: [ {!! $questionair->duration !!} ]
+                        </small>
+                    </h2>
+                </div>
 
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ route('questionair.questions.store', $questionair->id) }}">

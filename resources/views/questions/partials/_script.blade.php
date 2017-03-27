@@ -69,7 +69,9 @@
 
 
             $('<input name="ques[' + indexQ + '][type]" type="hidden" value="1">').appendTo('#formID'+indexQ);
-            console.log(textQ1);
+
+                console.log(textQ1);
+            
             $(textQ1).appendTo('#formID'+indexQ);
         }
         // if multiChoice-singleOpt selected
@@ -81,7 +83,9 @@
                 textQ2 = textQ2.replace('id="qType2' + indexQ2 + '"', 'id="qType2' + indexQ + '"');
 
             $('<input name="ques[' + indexQ + '][type]" type="hidden" value="2">').appendTo('#formID'+indexQ);
-            console.log(textQ2);
+
+                console.log(textQ2);
+
             $(textQ2).appendTo('#formID'+indexQ);
         }
         // if multiChoice-multiOpt selected
@@ -89,12 +93,13 @@
             var textQ3 = `@include('questions.partials.multiChoice-multiOpt')`;
             var indexQ3 = $(textQ3).data('index');
 
-
                 textQ3 = textQ3.replace('ques[' + indexQ3 + '][question]', 'ques[' + indexQ + '][question]');
                 textQ3 = textQ3.replace('id="qType3' + indexQ3 + '"', 'id="qType3' + indexQ + '"');
 
             $('<input name="ques[' + indexQ + '][type]" type="hidden" value="3">').appendTo('#formID'+indexQ);
-            console.log(textQ3);
+
+                console.log(textQ3);
+
             $(textQ3).appendTo('#formID'+indexQ);
         }
 
@@ -122,7 +127,7 @@
             choice = choice.replace('ques[' + choiceIndex + '][choices][' + choiceIndex + '][choice]', 'ques[' + Qindex + '][choices][' + newch + '][choice]');
             choice = choice.replace('ques[' + choiceIndex + '][choices][' + choiceIndex + '][correct]', 'ques[' + Qindex + '][choices][' + newch + '][correct]');
 
-        console.log(choice);
+            console.log(choice);
 
         $(choice).appendTo('#qType2'+Qindex);
 
@@ -150,7 +155,7 @@
             choice = choice.replace('ques[' + choiceIndex + '][choices][' + choiceIndex + '][choice]', 'ques[' + Qindex + '][choices][' + newch + '][choice]');
             choice = choice.replace('ques[' + choiceIndex + '][choices][' + choiceIndex + '][correct]', 'ques[' + Qindex + '][choices][' + newch + '][correct]');
 
-        console.log(choice);
+            console.log(choice);
 
         $(choice).appendTo('#qType3'+Qindex);
 
@@ -170,7 +175,7 @@
         //Current Choice Delete
         $('#qChoice'+currentQid+currentChoiceDel).remove();
 
-        console.log(currentChoiceDel);
+            console.log(currentChoiceDel);
 
         return false;
     });
@@ -196,7 +201,7 @@
         // Check Current Choice
         $('#'+currentCheckBox).prop('checked', true);
 
-        console.log(currentCheckBox);
+            console.log(currentCheckBox);
 
         return false;
     });

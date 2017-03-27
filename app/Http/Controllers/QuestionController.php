@@ -42,7 +42,7 @@ class QuestionController extends Controller
 			}
 			return redirect()->to('questionairs')->withMessage('Data has been saved successfully..!');
 		}
-		return redirect()->back()->withMessage('Ooops..! something wrong');
+		return redirect()->back()->withMessage('Ooops..! There is no any question to store');
 	}
 
 }

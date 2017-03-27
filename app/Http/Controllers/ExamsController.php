@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Exam;
+use Carbon\Carbon;
 use App\ExamStatus;
-use App\Http\Requests\ExamReq;
-use App\Question;
 use App\Questionairs;
 use Illuminate\Http\Request;
+use App\Http\Requests\ExamReq;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View;
-use Carbon\Carbon;
 
 class ExamsController extends Controller
 {
