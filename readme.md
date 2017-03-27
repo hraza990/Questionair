@@ -1,8 +1,10 @@
+## Introduction
+
+This app developed in Laravel and It uses Composer to manage its dependencies. So, you need to make sure you have Composer installed on your machine than you can run this application via these below commands typing in your command line tool.
+
 ## Installation
 
-Note: This app developed in Laravel and It uses Composer to manage its dependencies. So, you need to make sure you have Composer installed on your machine than you can run this application via these below commands typing in your command line tool.
-
-1. git clone git@bitbucket.org:superhrk/questionair.git
+1. git clone https://github.com/superhrk/Questionair.git
 
 2. Composer install
 
