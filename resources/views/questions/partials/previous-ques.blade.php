@@ -1,4 +1,4 @@
-@foreach($questions as $key => $question) @php $key = $key+1; @endphp
+@foreach($questionair->Questions as $key => $question) @php $key = $key+1; @endphp
     <div id="formID{{ isset($key)? $key : 0 }}" class="row qdrop" data-index="{{ isset($key)? $key : 0 }}">
         <div class="form-group col-md-12">
             <div class="col-md-3">

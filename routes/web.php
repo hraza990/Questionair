@@ -19,13 +19,10 @@ Route::get('/', function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', 'HomeController@index');
-    Route::get('questionairs', 'QuestionairsController@questionairs');
-    Route::get('questionairs/create', 'QuestionairsController@create');
-    Route::post('questionairs/store', 'QuestionairsController@store');
-    Route::get('questionair/{id}/questions', 'QuestionController@create');
-    Route::get('view/questionair/{id}', 'QuestionController@show');
-    Route::post('question/store', 'QuestionController@store');
-    Route::get('my-exams', 'ExamsController@index');
+    Route::resource('questionairs', 'QuestionairsController');
+    Route::get('questionair/{id}/add-questions', 'QuestionController@create')->name('questionair.questions.create');
+    Route::post('questionair/{id}/questions', 'QuestionController@store')->name('questionair.questions.store');
+    Route::get('my-exams', 'ExamsController@index')->name('exams.index');
     Route::get('questionair/{id}/exam', 'ExamsController@startExam');
     Route::post('questionair/{id}/exam', 'ExamsController@saveExam');
     Route::get('questionair/{id}/result', 'ExamsController@examResult');

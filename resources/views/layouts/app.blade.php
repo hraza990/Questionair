@@ -40,7 +40,7 @@
                         {{ config('app.name', 'Home') }}
                     </a>
                     <a class="navbar-brand" href="{{ url('/questionairs') }}">- Questionairs</a>
-                    <a class="navbar-brand" href="{{ url('/my-exams') }}">- My Exams</a>
+                    <a class="navbar-brand" href="{{ route('exams.index') }}">- My Exams</a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
@@ -74,12 +74,17 @@
                 </div>
             </div>
         </nav>
-
+        @include('layouts.partials.msgs-errors')
         @yield('content')
     </div>
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+    <script>
+        $(document).ready( function() {
+            $('#messages').delay(3000).fadeOut();
+        });
+    </script>
     @yield('script')
 </body>
 </html>

@@ -5,99 +5,44 @@ namespace App\Http\Controllers;
 use App\Qchoices;
 use App\Question;
 use App\Questionairs;
-use Illuminate\Http\Request;
+use App\Http\Requests\QuestionsReq;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View;
 
 class QuestionController extends Controller
 {
     public function create($id) {
-		//dd($id);
-		$questionair = Questionairs::whereId($id)->whereUserId(Auth::id())->with('QuestionsCount')->first();
-		$questions = Question::whereQuestionairId($id)->with('QChoices')->orderBy('id', 'ASC')->get();
-		//dd($questions);
-		return View::make('questions.create', compact('id', 'questionair', 'questions'));
+		$questionair = Questionairs::whereId($id)->whereUserId(Auth::id())->with('Questions')->first();
+		return view('questions.create', compact('questionair', 'id'));
 	}
 
-	public function store(Request $request) {
-		//dd($request->all());
-		$questionair_id = $request->get('questionair_id');
-
-		Question::whereQuestionairId($questionair_id)->delete();
+	public function store(QuestionsReq $request, $id) {
 
 		if ($request->has('ques')){
+			
+			Question::whereQuestionairId($id)->delete();
+			
 			foreach ($request->get('ques') as $quection){
-				if ($quection['type'] == 1){
-					// Question Save
-					$question = new Question();
-					$question->question = $quection['question'];
-					$question->type = $quection['type'];
-					$question->questionair_id = $questionair_id;
-					$question->save();
-					if ($question){
-						// Answer Save
-						$answer = new Qchoices();
-						$answer->question_id = $question->id;
-						$answer->text = $quection['answer'];
-						$answer->save();
-					}
-				}
-				elseif ($quection['type'] == 2){
-					// Question Save
-					$question = new Question();
-					$question->question = $quection['question'];
-					$question->type = $quection['type'];
-					$question->questionair_id = $questionair_id;
-					$question->save();
-					if ($question){
-						if (isset($quection['choices'])){
-							foreach ($quection['choices'] as $choice){
-								// Choices Save
-								$answer = new Qchoices();
-								$answer->question_id = $question->id;
-								$answer->text = $choice['choice'];
-								if (isset($choice['correct'])){
-									$answer->correct = 1;
-								}
-								$answer->save();
-							}
-						}
 
+				$que = array_merge($quection, ['questionair_id' => $id]);
+				$que = Question::create($que);
+				if ($que){
+					if ($que->type == 1){
+						$ans = array_merge(['question_id' => $que->id, 'text' => $quection['answer']]);
+						Qchoices::create($ans);
 					}
-				}
-				elseif ($quection['type'] == 3){
-					// Question Save
-					$question = new Question();
-					$question->question = $quection['question'];
-					$question->type = $quection['type'];
-					$question->questionair_id = $questionair_id;
-					$question->save();
-					if ($question){
+					elseif($que->type == 2 OR $que->type == 3){
 						if (isset($quection['choices'])){
 							foreach ($quection['choices'] as $choice){
-								// Choices Save
-								$answer = new Qchoices();
-								$answer->question_id = $question->id;
-								$answer->text = $choice['choice'];
-								if (isset($choice['correct'])){
-									$answer->correct = 1;
-								}
-								$answer->save();
+								$ans = array_merge(['question_id' => $que->id, 'text' => $choice['choice'], 'correct' => isset($choice['correct']) ? 1 : 0 ]);
+								Qchoices::create($ans);
 							}
 						}
 					}
 				}
 			}
+			return redirect()->to('questionairs')->withMessage('Data has been saved successfully..!');
 		}
-
-		return \Redirect::to('questionairs')->withMessage('Data has been saved successfully..!');
-	}
-	
-	public function show($id){
-		$questionair = Questionairs::whereId($id)->whereUserId(Auth::id())->with('QuestionsCount')->first();
-		$questions = Question::whereQuestionairId($id)->with('QChoices')->orderBy('id', 'ASC')->paginate(15);
-		//dd($question);
-		return View::make('questionairs.show', compact('questions', 'questionair'));
+		return redirect()->back()->withMessage('Ooops..! something wrong');
 	}
 
 }

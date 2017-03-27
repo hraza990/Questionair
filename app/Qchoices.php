@@ -7,8 +7,6 @@ use Illuminate\Support\Facades\Auth;
 
 class Qchoices extends Model
 {
-    public $timestamps = false;
-
 	protected $table = 'q_choices';
 
 	protected $fillable = ['question_id', 'text', 'correct'];

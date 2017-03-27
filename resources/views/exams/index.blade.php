@@ -26,7 +26,9 @@
                                     <tr>
                                         <td>{{ $key+1 }}</td>
                                         <td><a href="{{ $questionair->userExamStatus ? '#' : url('questionair/'.$questionair->id.'/exam') }}">{{ $questionair->name }}</a></td>
-                                        <td>{{ $q_count->Count }}</td>
+                                        <td>
+                                            <span class="badge badge-success badge-xs">{!! $q_count->Count !!}</span>
+                                        </td>
                                         <td>{{ $questionair->duration }}</td>
                                         <td>
                                             {!! $questionair->resumeable == true ? 'Yes' : 'No' !!}

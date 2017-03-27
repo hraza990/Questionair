@@ -5,28 +5,28 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading"> <h2>Add Questionair</h2> </div>
+                <div class="panel-heading"> <h2>Edit Questionair</h2> </div>
 
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('questionairs') }}">
-                        {{ csrf_field() }}
+                    {{ Form::model($questionair, ['route' => ['questionairs.update', $questionair->id], 'method' => 'put', 'class' => 'form-horizontal']) }}
 
-                        <div class="form-group">
+                    <div class="form-group">
                             <label for="name" class="col-md-3 control-label">Questionair Name:</label>
                             <div class="col-md-9">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Enter Questionair Name" required autofocus>
+                                <input id="name" type="text" class="form-control" name="name" value="{{ $questionair->name != null ? $questionair->name : old('name') }}" placeholder="Enter Questionair Name" required autofocus>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="duration" class="col-md-3 control-label">Duration:</label>
                             <div class="col-md-5">
-                                <input id="duration" type="number" class="form-control" name="duration" value="{{ old('duration') }}" placeholder="Enter Duration" required autofocus>
+                                @php $duration = explode(' ', $questionair->duration) @endphp
+                                <input id="duration" type="number" class="form-control" name="duration" value="{{ $duration != null ? $duration[0] : old('duration') }}" placeholder="Enter Duration" required autofocus>
                             </div>
                             <div class="col-md-4">
                                 <select class="form-control" id="duration" name="duration_type" required>
-                                    <option value="min" selected="selected">Minutes</option>
-                                    <option value="hr">Hours</option>
+                                    <option {{ $duration[1] == 'min' ? 'selected="selected"' : '' }} value="min" selected="selected">Minutes</option>
+                                    <option {{ $duration[1] == 'hr' ? 'selected="selected"' : '' }} value="hr">Hours</option>
                                 </select>
                             </div>
                         </div>
@@ -34,20 +34,20 @@
                         <div class="form-group">
                             <label for="resumeable" class="col-md-3 control-label">Can Resume ?</label>
                             <div class="col-md-2">
-                                <input type="radio" value="1" name="resumeable"> Yes
+                                <input {{ $questionair->resumeable == true ? 'checked="checked"' : '' }} type="radio" value="1" name="resumeable"> Yes
                             </div>
                             <div class="col-md-2">
-                                <input type="radio" value="0" name="resumeable"> No
+                                <input {{ $questionair->resumeable == false ? 'checked="checked"' : '' }} type="radio" value="0" name="resumeable"> No
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="published" class="col-md-3 control-label">Is Publish ?</label>
                             <div class="col-md-2">
-                                <input type="radio" value="1" name="published"> Yes
+                                <input {{ $questionair->published == true ? 'checked="checked"' : '' }} type="radio" value="1" name="published"> Yes
                             </div>
                             <div class="col-md-2">
-                                <input type="radio" value="0" name="published"> No
+                                <input {{ $questionair->published == false ? 'checked="checked"' : '' }} type="radio" value="0" name="published"> No
                             </div>
                         </div>
 
@@ -59,10 +59,7 @@
                                 </button>
                             </div>
                         </div>
-
-
-
-                    </form>
+                    {!! Form::close() !!}
                 </div>
             </div>
         </div>

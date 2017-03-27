@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Questionairs;
+use App\Http\Requests\QuestionairReq;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View;
-use Form;
 
 class QuestionairsController extends Controller
 {
@@ -14,46 +12,46 @@ class QuestionairsController extends Controller
 		$this->middleware('auth');
 	}
 
-	public function questionairs() {
-		$questionairs = Questionairs::whereUserId(Auth::id())->with('QuestionsCount')->orderBy('id', 'ASC')->get();
-		//dd($questionairs);
-			return View::make('questionairs.index', compact('questionairs'));
+	public function index() {
+		$questionairs = Questionairs::whereUserId(Auth::id())->orderBy('id', 'ASC')->get();
+		return view('questionairs.index', compact('questionairs'));
 	}
 
 	public function create() {
-		//dd('ok');
-		return View::make('questionairs.create');
+		return view('questionairs.create');
 	}
 
-	public function store(Request $request) {
-		//dd($request->all());
+	public function store(QuestionairReq $request) {
+		$data = $request->all();
+		$data = array_merge($data, ['duration'=> $data['duration'].' '.$data['duration_type'], 'user_id' => Auth::id()]);
+		Questionairs::create($data);
+		return redirect()->to('questionairs')->withMessage('Questionair saved successfully..!');
+	}
 
-		// validate
-		// read more on validation at http://laravel.com/docs/validation
-		$rules = array(
-			'questionair_name'      => 'required',
-			'duration'    			=> 'required',
-			'resumeable'  			=>  'required|boolean|in:0,1',
-		);
-		$validator = \Validator::make($request->all(), $rules);
+	public function show($id){
+		$questionair = Questionairs::whereId($id)->whereUserId(Auth::id())->with('Questions')->first();
+		return view('questionairs.show', compact('questionair'));
+	}
 
-		// process the login
-		if ($validator->fails()) {
-			return \Redirect::back()
-				->withErrors($validator)
-				->withInput($request->all());
-		} else {
-			// Questionairs
-			$questionair = new Questionairs();
-				$questionair->name = $request['questionair_name'];
-				$questionair->duration = $request['duration'].' '.$request['duration_type'];
-				$questionair->user_id = Auth::id();
-				$questionair->resumeable = $request['resumeable'];
-				$questionair->published = $request['published'];
-			$questionair->save();
+	public function edit($id) {
+		$questionair = Questionairs::findOrFail($id);
+		return view('questionairs.edit', compact('questionair'));
+	}
+
+	public function update(QuestionairReq $request, $id) {
+		$data = $request->all();
+		$data = array_merge($data, ['duration'=> $data['duration'].' '.$data['duration_type']]);
+		$questionairs = Questionairs::findOrFail($id);
+		if ($questionairs) {
+			$questionairs->update($data);
+			return redirect()->route('questionairs.index')->withMessage('Changes saved successfully');
 		}
+		return redirect()->back()->withInput()->withMessage('Ooops...! something wrong');
+	}
 
-		return \Redirect::to('/questionairs')->withMessage('The [ '.$request['questionair_name'].' ] saved successfully..!');
+	public function destroy($id){
+		Questionairs::destroy($id);
+		return redirect()->back()->withMessage('Record deleted successfully..!');
 	}
 
 }

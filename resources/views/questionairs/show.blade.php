@@ -7,45 +7,36 @@
             <div class="panel panel-default text-center">
                 <div class="panel-heading"> <h2>{!! $questionair->name !!} [ Questions:
 
-                        @forelse($questionair->QuestionsCount as $q_count)
-                            {{ $q_count->Count }}
-                        @empty
-                            0
-                        @endforelse ]
+                {{ count($questionair->Questions) > 0 ? count($questionair->Questions) : 0 }}
 
-                        <small> Duration: {!! $questionair->duration !!}</small></h2> </div>
+                <small> Duration: {!! $questionair->duration !!}</small></h2> </div>
 
                 <div>
-                    @forelse($questions as $que => $question)
-                        <h3 class="text-center text-danger">Q#{!! $que+1 !!} {!! $question->question !!}
+                    @forelse($questionair->questions as $que => $question)
+                        <h3 class="text-danger">Q#{!! $que+1 !!} {!! $question->question !!}
                             <small>[Type:
-                                @if($question->type == 1)
-                                    Text
-                                @elseif($question->type == 2)
-                                    Multiple Choice (Single Option)
-                                @elseif($question->type == 3)
-                                    Multiple Choice (Multiple Option)
-                                @endif
+                                {!! $question->type == 1 ? 'Text' : '' !!}
+                                {!! $question->type == 2 ? 'Multiple Choice (Single Option)' : '' !!}
+                                {!! $question->type == 3 ? 'Multiple Choice (Multiple Option)' : '' !!}
                             ]</small>
                         </h3>
                         <ul class="list-unstyled">
                             {{--{!! dd($question) !!}--}}
                             @foreach($question->QChoices as $key => $choice)
-                            <li class="text-center">
-                                <h4 class="text-primary">#{!! $key+1 !!} {!! $choice->text !!}
-                                <small>{!! $choice->correct == 1 ? '<span class="fa fa-angle-double-right text-danger"></span> Correct' : '' !!}</small>
-                                </h4>
-                            </li>
+                                <li>
+                                    <h4 class="text-primary">#{!! $key+1 !!} {!! $choice->text !!}
+                                    <small>{!! $choice->correct == 1 ? '<span class="fa fa-angle-double-right text-danger"></span> Correct' : '' !!}</small>
+                                    </h4>
+                                </li>
                             @endforeach
                             <hr>
                         </ul>
                     @empty
-                        <h4>Not Found...!!</h4>
+                        <h4>Question Not Found...!!</h4>
+                        <h5>If you are an Admin please add questions here.</h5>
+                        <a class='btn btn-primary btn-xs' href="{{ route('questionair.questions.create', $questionair->id) }}">Add Questions</a><br>
                     @endforelse
                 </div>
-            </div>
-            <div class="text-center">
-                {{ $questions->links() }}
             </div>
         </div>
     </div>

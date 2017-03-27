@@ -24,7 +24,7 @@
         //set new index
         indexQ = newIndex;
 
-        console.log(indexQ);
+        console.log(newIndex);
 
         $(QRow).appendTo("#AddQtypeHere");
     }

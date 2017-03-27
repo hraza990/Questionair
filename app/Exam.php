@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Exam extends Model
 {
     protected $table = 'user_exams';
-
-    public $timestamps = false;
-
+    
     protected $fillable = ['user_id', 'question_id', 'choice_id', 'text_answer'];
 
     public function exmChoice() {

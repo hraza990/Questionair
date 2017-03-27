@@ -7,8 +7,6 @@ use Illuminate\Support\Facades\Auth;
 
 class Questionairs extends Model
 {
-    public $timestamps = false;
-	
 	protected $table = 'questionair';
 
 	protected $fillable = ['name', 'duration', 'user_id', 'resumeable', 'published'];

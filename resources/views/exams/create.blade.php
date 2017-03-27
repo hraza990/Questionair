@@ -18,20 +18,12 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">
-
-                    <h2>Exam {!! $questionair->name !!} <small class="text-danger"> [ Total Ques:
-
-                    @forelse($questionair->QuestionsCount as $q_count)
-                        {{ $q_count->Count }}
-                    @empty
-                        0
-                    @endforelse ]
-
-                    <small class="text-alert"> Duration: {!! $questionair->duration !!}</small></small>
-
+                    <h2>
+                        Exam {!! $questionair->name !!} <small class="text-danger">  - Total #Q.
+                        [ {{ count($questionair->Questions) > 0 ? count($questionair->Questions) : 0 }} ]
+                        Duration: [ {!! $questionair->duration !!} ]</small>
                     </h2>
                     <span id="clockDiv" class="text-danger"></span>
-
                 </div>
 
                 <div class="panel-body">
@@ -47,8 +39,8 @@
                         {{--Test Time on Pause--}}
                         <input type="hidden" id="testTime" name="testtime" value="">
 
-                        @if(count($questions) > 0)
-                            @foreach($questions as $key => $question) @php $key = $key+1; @endphp
+                        @if(count($questionair->Questions) > 0)
+                            @foreach($questionair->Questions as $key => $question) @php $key = $key+1; @endphp
                                 <div>
                                     <div class="col-md-12">
                                         {!! $question->type == 1 ? 'Q. Type: Text - Write you answer.' : '' !!}
@@ -67,49 +59,31 @@
                                     </div>
 
                                     @foreach($question->QChoices as $chkey => $qchoice) @php $chkey = $chkey+1; @endphp
-                                        @if($question->type == 1)
-
-                                            <div class="form-group">
-                                                <label for="question" class="col-md-2 control-label">Answer:</label>
-                                                <div class="col-md-9">
-                                                    <input type="text" class="form-control" name="ques[{{ isset($key)? $key : 0 }}][answer]" value="{{ isset($qchoice->examChoices[0]) ? $qchoice->examChoices[0]->text_answer : '' }}" placeholder="Enter Answer">
-                                                    <input type="hidden" name="ques[{{ isset($key)? $key : 0 }}][choice]" value="{!! $qchoice->id !!}">
-
-                                                </div>
-                                            </div>
-
-                                        @elseif($question->type == 2)
-
-                                            <div class="form-group">
-                                                <label for="question" class="col-md-2 control-label">#{!! $chkey !!}</label>
-                                                <div class="col-md-10">
+                                        <div class="form-group">
+                                            <label for="question" class="col-md-2 control-label">{{ $question->type == 1 ? 'Answer:' : '#'.$chkey }}</label>
+                                            <div class="col-md-10">
+                                                @if($question->type == 1)
+                                                    <input type="text" class="form-control" name="ques[{{ isset($key)? $key : 0 }}][text_answer]" value="{{ isset($qchoice->examChoices[0]) ? $qchoice->examChoices[0]->text_answer : '' }}" placeholder="Enter Answer">
+                                                    <input type="hidden" name="ques[{{ isset($key)? $key : 0 }}][choice_id]" value="{!! $qchoice->id !!}">
+                                                @elseif($question->type == 2)
                                                     @if(count($qchoice->examChoices))
                                                         @foreach($qchoice->examChoices as $choikey => $selected)
-                                                            <input type="radio" {!! $selected->choice_id == $qchoice->id ? 'checked="checked"' : '' !!} name="ques[{{ isset($key)? $key : 0 }}][choice]" value="{!! $qchoice->id !!}">{!! $qchoice->text !!}<br>
+                                                            <input type="radio" {!! $selected->choice_id == $qchoice->id ? 'checked="checked"' : '' !!} name="ques[{{ isset($key)? $key : 0 }}][choice_id]" value="{!! $qchoice->id !!}">{!! $qchoice->text !!}<br>
                                                         @endforeach
                                                     @else
-                                                        <input type="radio" name="ques[{{ isset($key)? $key : 0 }}][choice]" value="{!! $qchoice->id !!}">{!! $qchoice->text !!}<br>
+                                                        <input type="radio" name="ques[{{ isset($key)? $key : 0 }}][choice_id]" value="{!! $qchoice->id !!}">{!! $qchoice->text !!}<br>
                                                     @endif
-
-                                                </div>
-                                            </div>
-
-                                        @elseif($question->type == 3)
-
-                                            <div class="form-group">
-                                                <label for="question" class="col-md-2 control-label">#{!! $chkey !!}</label>
-                                                <div class="col-md-10">
+                                                @elseif($question->type == 3)
                                                     @if(count($qchoice->examChoices))
                                                         @foreach($qchoice->examChoices as $choikey => $selected)
-                                                            <input type="checkbox" {!! $selected->choice_id == $qchoice->id ? 'checked="checked"' : '' !!} name="ques[{{ isset($key)? $key : 0 }}][choices][{{ isset($chkey)? $chkey : 0 }}][choice]" value="{!! $qchoice->id !!}">{!! $qchoice->text !!}<br>
+                                                            <input type="checkbox" {!! $selected->choice_id == $qchoice->id ? 'checked="checked"' : '' !!} name="ques[{{ isset($key)? $key : 0 }}][choices][{{ isset($chkey)? $chkey : 0 }}][choice_id]" value="{!! $qchoice->id !!}">{!! $qchoice->text !!}<br>
                                                         @endforeach
                                                     @else
-                                                        <input type="checkbox" name="ques[{{ isset($key)? $key : 0 }}][choices][{{ isset($chkey)? $chkey : 0 }}][choice]" value="{!! $qchoice->id !!}">{!! $qchoice->text !!}<br>
+                                                        <input type="checkbox" name="ques[{{ isset($key)? $key : 0 }}][choices][{{ isset($chkey)? $chkey : 0 }}][choice_id]" value="{!! $qchoice->id !!}">{!! $qchoice->text !!}<br>
                                                     @endif
-                                                </div>
+                                                @endif
                                             </div>
-
-                                        @endif
+                                        </div>
                                     @endforeach
                                     <hr>
 

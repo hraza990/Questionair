@@ -14,26 +14,18 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading"> <h2 class="text-primary">Add Questions <small class="text-danger"> to the {!! $questionair->name !!} [ Total Ques:
-
-                            @forelse($questionair->QuestionsCount as $q_count)
-                                {{ $q_count->Count }}
-                            @empty
-                                0
-                            @endforelse ]
-
-                            <small class="text-alert"> Duration: {!! $questionair->duration !!}</small></small></h2> </div>
+                    {{ count($questionair->Questions) > 0 ? count($questionair->Questions) : 0 }}
+                    <small class="text-alert"> Duration: {!! $questionair->duration !!}</small></small></h2> </div>
 
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/question/store') }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ route('questionair.questions.store', $questionair->id) }}">
                         {{ csrf_field() }}
-
-                        <input name="questionair_id" type="hidden" value="{{ $id }}">
 
                         {{--Add Question Type Dropdown--}}
                         <div id="AddQtypeHere">
 
                             {{--Previous Questions of the current questionairs--}}
-                            @if(count($questions) > 0)
+                            @if(count($questionair->Questions) > 0)
                                 @include('questions.partials.previous-ques')
                             @endif
 

@@ -11,7 +11,7 @@
                     <table class="table table-striped custab">
                         <thead>
                             <tr>
-                                <th>#ID</th>
+                                <th>#</th>
                                 <th>Name</th>
                                 <th>#Questions</th>
                                 <th>Duration</th>
@@ -22,15 +22,13 @@
                         <tbody>
                             @foreach($questionairs as $key => $questionair)
                                 <tr>
-                                    <td>{{ $questionair->id }}</td>
-                                    <td><a href="{{ url('view/questionair/'.$questionair->id) }}">{{ $questionair->name }}</a></td>
+                                    <td>{{ $key+1 }}</td>
+                                    <td><a href="{{ route('questionairs.show', $questionair->id ) }}">{{ $questionair->name }}</a></td>
                                     <td>
-                                        @forelse($questionair->QuestionsCount as $q_count)
-                                            {{ $q_count->Count }}
-                                        @empty
-                                            0
-                                        @endforelse
-                                        | <a class='btn btn-primary btn-xs' href="{{ url('questionair/'.$questionair->id.'/questions') }}">Add Questions</a>
+                                        <span class="badge badge-success badge-xs">
+                                            {{ count($questionair->Questions) > 0 ? count($questionair->Questions) : 0 }}
+                                        </span>
+                                        | <a class='btn btn-primary btn-xs' href="{{ route('questionair.questions.create', $questionair->id) }}">Add Questions</a>
                                     </td>
                                     <td>{{ $questionair->duration }}</td>
                                     <td>
@@ -38,9 +36,15 @@
                                     </td>
 
                                     <td class="text-center">
-                                        <a class='btn btn-success btn-xs' href="{{ url('view/questionair/'.$questionair->id) }}">View</a>
-                                        <a class='btn btn-primary btn-xs' href="{{ url('/questionairs/'.$questionair->id.'/edit') }}">Edit</a>
-                                        <a href="{{ url('/questionairs/'.$questionair->id.'/delete') }}" class="btn btn-danger btn-xs">Del</a>
+                                        <a class='btn btn-success btn-xs' href="{{ route('questionairs.show', $questionair->id ) }}">View</a>
+                                        <a class='btn btn-primary btn-xs' href="{{ route('questionairs.edit', $questionair->id) }}">Edit</a>
+
+                                        <form method="post" action="{{ route('questionairs.destroy', $questionair->id) }}">
+                                            {{ method_field('DELETE') }}
+                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                            <button type="submit" class="btn btn-danger btn-xs">Delete</button>
+                                        </form>
+
                                     </td>
                                 </tr>
                             @endforeach
