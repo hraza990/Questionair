@@ -1,14 +1,14 @@
 ## Installation
 
-Note: Run these commands in command prompt.
+Note: This app developed in Laravel and It uses Composer to manage its dependencies. So, you need to make sure you have Composer installed on your machine than you can run this application via these below commands typing in your command line tool.
 
 1. git clone git@bitbucket.org:superhrk/questionair.git
 
-2. run "Composer install"
+2. Composer install
 
-3. run "php artisan migrate"
+3. php artisan migrate
 
-4. run "php artisan serve"
+4. php artisan serve
 
 5. Open this URL in Browser => "http://127.0.0.1:8000/register" and register yourself.
 
